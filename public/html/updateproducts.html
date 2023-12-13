@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Product</title>
+</head>
+<body>
+    <h1>Update Product</h1>
+    <form method="POST" action="/updateCoffee/:id">
+        <label for="name">Product Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="field">Field to Update:</label>
+        <select id="field" name="field">
+            <option value="description">Description</option>
+            <option value="price">Price</option>
+            <option value="name">Name</option>
+            <option value="image_url">Image</option>
+        </select><br><br>
+
+        <label for="new_value">New Value:</label>
+        <input type="text" id="new_value" name="new_value" required><br><br>
+
+        <input type="submit" value="Update Product">
+    </form>
+</body>
+</html>

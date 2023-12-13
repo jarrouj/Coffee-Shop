@@ -1,0 +1,68 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff;
+    color: #ffffff;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+ 
+  .center-box {
+    background-color: rgba(3, 71, 94, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    width: 500px; /* Increase the width as needed */
+    box-sizing: border-box;
+  }
+ 
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+ 
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Added to create space between fields */
+  }
+ 
+  .half-width,
+  .full-width {
+    width: 48%; /* Adjust as needed */
+  }
+ 
+  label,
+  input,
+  select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+ 
+  label {
+    margin-bottom: 5px; /* Add a little space between label and input/select */
+  }
+ 
+  select,
+  input {
+    padding: 10px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+ 
+  button {
+    background-color: #1e90ff;
+    color: #ffffff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+ 
+  button:hover {
+    background-color: #004080;
+  }
