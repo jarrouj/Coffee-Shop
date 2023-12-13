@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      position: relative;
+      top: 30px;
+    }
+    
+    th, td {
+      text-align: center; /* Align all table cells to the center */
+      padding: 8px;
+    }
+    
+    th {
+      background-color: #f2f2f2;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    
+    .add-button {
+      float: right;
+      margin-top: 10px;
+    }
+    
+    .edit-button {
+      background-color: blue;
+      color: white;
+    }
+    
+    .delete-button {
+      background-color: red;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+    <button style="background-color: #007bff; color: white; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer;" onclick="goToCMS()">Back</button>  
+    <h1 style="margin-top: 50px; text-align: center;">All Products</h1>
+  <button class="add-button" style="margin-right: 50px;" onclick="goToAddPage()">Add Product</button>  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Image</th> <!-- New column for image_url -->
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="productTableBody">
+    </tbody>
+  </table>
+
+  <script>
+    // Fetch data from the API and populate the table
+    fetch('/showCoffee')
+      .then(response => response.json())
+      .then(data => {
+        const productTableBody = document.getElementById('productTableBody');
+        let counter = 1; 
+        data.forEach(product => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${counter}</td>
+            <td>${product.name}</td>
+            <td>${product.price}</td>
+            <td>${product.description}</td>
+            <td><img src="${product.image_url}" alt="Product Image" style="max-width: 100px; max-height: 100px;"></td>
+            <td>
+              <button class="edit-button" onclick="editProduct(${counter})">Edit</button>
+              <button class="delete-button" onclick="deleteProduct(${counter})">Delete</button>
+            </td>
+          `;
+          productTableBody.appendChild(row);
+          counter++;
+        });
+      });
+
+    // Edit product function
+    function editProduct(id) {
+      // Redirect to the edit page with the specific ID
+      window.location.href = `/editCoffee/${id}`;
+    }
+
+    // Delete product function
+    function deleteProduct(id) {
+      // Send a DELETE request to the server to delete the product with the specific ID
+      fetch(`/deleteCoffee/${id}`, { method: 'DELETE' })
+        .then(response => {
+          if (response.ok) {
+            // Refresh the page after successful deletion
+            location.reload();
+          } else {
+            console.error('Failed to delete the product');
+          }
+        });
+    }
+
+    function goToAddPage() {
+    window.location.href = '/addpage';
+  }
+
+  function goToCMS() {
+    window.location.href = '/cms';
+  }
+  </script>
+</body>
+</html>

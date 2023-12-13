@@ -72,12 +72,12 @@ app.post('/addCoffee', (req, res) => {
           return;
       }
       console.log('Menu item added successfully');
-      res.redirect('/menu');
+      res.redirect('/cms');
   });
 });
 
 app.get('/showCoffee', (req, res) => {
-  const query = 'SELECT name, price, description, image_url FROM menuItem';
+  const query = 'SELECT name, price, description, image_url FROM menuitems';
   connect.connection.query(query, (err, result) => {
     if (err) {
       console.error('Error showing your menu items:', err);
@@ -85,7 +85,16 @@ app.get('/showCoffee', (req, res) => {
       return;
     }
 
-  
+    const menuItems = result.map(item => {
+      return {
+        name: item.name,
+        price: item.price,
+        description: item.description,
+        image_url: item.image_url
+      };
+    });
+
+    console.log(menuItems); // Verify the menuItems array in the console
     res.json(result);
   });
 });
@@ -94,7 +103,7 @@ app.post('/updateCoffee/:id', (req, res) => {
   const itemId = req.params.id;
   const { name, price, description, image_url } = req.body;
 
-  const query = 'UPDATE menuItem SET name=?, price=?, description=?, image_url=? WHERE id=?';
+  const query = 'UPDATE menuitems SET name=?, price=?, description=?, image_url=? WHERE id=?';
   connect.connection.query(query, [name, price, description, image_url, itemId], (err, result) => {
     if (err) {
       console.error('Error updating menu item:', err);
@@ -112,7 +121,7 @@ app.post('/updateCoffee/:id', (req, res) => {
 app.delete('/deleteCoffee/:id', (req, res) => {
   const itemId = req.params.id;
 
-  const query = 'DELETE FROM menuItem WHERE id=?';
+  const query = 'DELETE FROM menuitems WHERE id=?';
   connect.connection.query(query, [itemId], (err, result) => {
     if (err) {
       console.error('Error deleting menu item:', err);
@@ -138,6 +147,10 @@ app.get('/deletepage',(req,res)=>{
 
 app.get('/updatepage',(req,res)=>{
   res.sendFile(__dirname + '/public/html/updateproducts.html');
+});
+
+app.get('/showproductspage',(req,res)=>{
+  res.sendFile(__dirname + '/public/html/showproducts.html');
 });
 
 //END CRUD
