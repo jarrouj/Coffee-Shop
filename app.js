@@ -77,7 +77,7 @@ app.post('/addCoffee', (req, res) => {
 });
 
 app.get('/showCoffee', (req, res) => {
-  const query = 'SELECT name, price, description, image_url FROM menuitems';
+  const query = 'SELECT id, name, price, description, image_url FROM menuitems';
   connect.connection.query(query, (err, result) => {
     if (err) {
       console.error('Error showing your menu items:', err);
@@ -99,7 +99,38 @@ app.get('/showCoffee', (req, res) => {
   });
 });
 
-app.post('/updateCoffee/:id', (req, res) => {
+
+app.get('/getUpdateCoffee/:id', (req, res) => {
+  const productId = req.params.id;
+  const query = `SELECT id, name, price, description, image_url FROM menuitems WHERE id = ${productId}`;
+
+  connect.connection.query(query, (err, result) => {
+    if (err) {
+      console.error('Error retrieving the menu item:', err);
+      res.status(500).send('Error retrieving menu item');
+      return;
+    }
+
+    if (result.length === 0) {
+      res.status(404).json({ error: 'Menu item not found' });
+      return;
+    }
+
+    const menuItem = result[0];
+    const menuData = {
+      id: menuItem.id,
+      name: menuItem.name,
+      price: menuItem.price,
+      description: menuItem.description,
+      image_url: menuItem.image_url
+    };
+
+    res.json(menuData);
+  });
+});
+
+
+app.put('/updateCoffee/:id', (req, res) => {
   const itemId = req.params.id;
   const { name, price, description, image_url } = req.body;
 
@@ -145,8 +176,8 @@ app.get('/deletepage',(req,res)=>{
   res.sendFile(__dirname + '/public/html/deleteproducts.html');
 });
 
-app.get('/updatepage',(req,res)=>{
-  res.sendFile(__dirname + '/public/html/updateproducts.html');
+app.get('/updatepage/:id',(req,res)=>{
+  res.sendFile(__dirname + '/public/html/editCoffe.html');
 });
 
 app.get('/showproductspage',(req,res)=>{

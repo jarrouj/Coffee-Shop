@@ -72,8 +72,8 @@
             <td>${product.description}</td>
             <td><img src="${product.image_url}" alt="Product Image" style="max-width: 100px; max-height: 100px;"></td>
             <td>
-              <button class="edit-button" onclick="editProduct(${counter})">Edit</button>
-              <button class="delete-button" onclick="deleteProduct(${counter})">Delete</button>
+              <button class="edit-button" onclick="editProduct(${product.id})">Edit</button>
+              <button class="delete-button" onclick="deleteProduct(${product.id})">Delete</button>
             </td>
           `;
           productTableBody.appendChild(row);
@@ -84,7 +84,7 @@
     // Edit product function
     function editProduct(id) {
       // Redirect to the edit page with the specific ID
-      window.location.href = `/editCoffee/${id}`;
+      window.location.href = `/updatepage/${id}`;
     }
 
     // Delete product function

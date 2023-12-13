@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .form-container {
+      background-color: #f8f9fc;
+      padding: 20px;
+      border-radius: 5px;
+      width: 80%;
+      margin: 50px auto;
+    }
+    
+    .form-container h1 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .form-container label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    
+    .form-container input[type="text"],
+    .form-container input[type="number"],
+    .form-container textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    .form-container input[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button style="background-color: #007bff; color: white; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer;" onclick="goToCMS()">Back</button>  
+  <div class="form-container">
+    <h1>Edit Product</h1>
+    <form id="editProductForm">
+      <!-- Form fields -->
+      <input type="hidden" id="productId" name="productId">
+      
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required><br><br>
+  
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" required></textarea><br><br>
+  
+      <label for="price">Price:</label>
+      <input type="number" id="price" name="price" required><br><br>
+  
+      <label for="image_url">Image URL:</label>
+      <input type="text" id="image_url" name="image_url" required><br><br>
+  
+      <input type="submit" value="Update Product">
+    </form>
+  </div>
+
+  <script>
+    // Get the product ID from the URL parameters
+    const url = window.location.pathname;
+const splitUrl = url.split('/');
+const productId = splitUrl[splitUrl.length - 1];
+
+
+    // Fetch the product data from the API
+    fetch(`/getUpdateCoffe/${productId}`)
+      .then(response => response.json())
+      .then(data => {
+        // Populate the form fields with the product data
+        document.getElementById('productId').value = data.id;
+        document.getElementById('name').value = data.name;
+        document.getElementById('description').value = data.description;
+        document.getElementById('price').value = data.price;
+        document.getElementById('image_url').value = data.image_url;
+      });
+
+    // Submit the updated product data
+    document.getElementById('editProductForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      // Get the updated product data from the form fields
+      const updatedProduct = {
+        id: document.getElementById('productId').value,
+        name: document.getElementById('name').value,
+        description: document.getElementById('description').value,
+        price: document.getElementById('price').value,
+        image_url: document.getElementById('image_url').value
+      };
+
+      // Send a PUT request to the server to update the product
+      fetch(`/updateCoffee/${productId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedProduct)
+      })
+        .then(response => {
+          if (response.ok) {
+            // Redirect to the CMS page after successful update
+            window.location.href = '/showproductspage';
+          } else {
+            console.error('Failed to update the product');
+          }
+        });
+    });
+
+    function goToCMS() {
+      window.location.href = '/cms';
+    }
+  </script>
+</body>
+</html>
